@@ -5,60 +5,60 @@
             "vendor_id": 35096,
             "product_id": 2104,
             "neutral": {
-                "index": 0,
-                "value": 0
+                "index": 3,
+                "value": 8
             },
             "up": {
-                "index": 0,
-                "value": 0
+                "index": 3,
+                "value": 128
             },
             "down": {
-                "index": 0,
-                "value": 0
+                "index": 3,
+                "value": 68
             },
             "left": {
-                "index": 0,
-                "value": 0
+                "index": 3,
+                "value": 22
             },
             "right": {
-                "index": 0,
-                "value": 0
+                "index": 3,
+                "value": 34
             },
             "A": {
                 "index": 0,
-                "value": 0
+                "value": 2
             },
             "B": {
                 "index": 0,
-                "value": 0
+                "value": 4
             },
             "X": {
                 "index": 0,
-                "value": 0
+                "value": 1
             },
             "Y": {
                 "index": 0,
-                "value": 0
+                "value": 8
             },
-            "R1": {
+            "C": {
                 "index": 0,
-                "value": 0
+                "value": 128
             },
-            "L1": {
+            "Z": {
                 "index": 0,
-                "value": 0
+                "value": 32
             },
             "start": {
-                "index": 0,
-                "value": 0
+                "index": 1,
+                "value": 2
             },
             "select": {
-                "index": 0,
-                "value": 0
+                "index": 1,
+                "value": 64
             },
             "function": {
-                "index": 0,
-                "value": 0
+                "index": 1,
+                "value": 16
             }
         }
     }

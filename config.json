@@ -1,0 +1,65 @@
+{   
+    "report_size": 256,
+    "devices": {
+        "35096:2104": {
+            "vendor_id": 35096,
+            "product_id": 2104,
+            "neutral": {
+                "index": 0,
+                "value": 0
+            },
+            "up": {
+                "index": 0,
+                "value": 0
+            },
+            "down": {
+                "index": 0,
+                "value": 0
+            },
+            "left": {
+                "index": 0,
+                "value": 0
+            },
+            "right": {
+                "index": 0,
+                "value": 0
+            },
+            "A": {
+                "index": 0,
+                "value": 0
+            },
+            "B": {
+                "index": 0,
+                "value": 0
+            },
+            "X": {
+                "index": 0,
+                "value": 0
+            },
+            "Y": {
+                "index": 0,
+                "value": 0
+            },
+            "R1": {
+                "index": 0,
+                "value": 0
+            },
+            "L1": {
+                "index": 0,
+                "value": 0
+            },
+            "start": {
+                "index": 0,
+                "value": 0
+            },
+            "select": {
+                "index": 0,
+                "value": 0
+            },
+            "function": {
+                "index": 0,
+                "value": 0
+            }
+        }
+    }
+}

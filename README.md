@@ -2,12 +2,9 @@
 
 This program enables use of the control deck which forms part of the Arcade Legends Ultimate (ALU) arcade cabinet to be used on Windows. It uses [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases) to present the two controllers as either Xbox 360 or DualShock 4 controllers.
 
-> Note the comment in the releases page about having to run the setup program
-twice.
+This is mostly useful for anyone who has replaced the SBC in the ALU with a full PC. This is worth doing. The cabinet is crippled by the SBC and the locked down nature of the Arcade Legends software.
 
-This is mostly useful for anyone who has replaced the SBC in the ALU with a full PC. This is worth doing.
-
-> If you upgrade your ALU cabinet with a full PC motherboard, Batocera is the best choice of OS for virtually all use cases. It has very good WINE support. However, there are a few egde cases where Windows is needed.
+> If you upgrade your ALU cabinet with a full PC motherboard, Batocera is the best choice of OS for virtually all use cases. It has very good WINE support. However, there are a few edge cases where Windows is needed.
 
 ## Requirements
 
@@ -19,11 +16,31 @@ This is mostly useful for anyone who has replaced the SBC in the ALU with a full
 
 ## Status
 
-This is a work in progress.
+This is still a work in progress but so far, works well.
 
-Running `python main.py` will enable the first of the two controllers in the control deck and present it as a DualShock 4 controller. However, the menu/guide button on the control deck is unmapped. Further work is needed to enable this and the second controller.
+`C` and `Z` on each of the ALU controllers are mapped to `L1` and `R1` on the virtual pads. `P1` and `P2` are mapped to the start button on their respective virtual controllers. 
 
-The program can read from attached HID devices and print the results to the console. This functionality was used to map the control deck inputs to the virtual controller outputs. It throws read errors for some HID devices. Because these did not include the control deck controllers I haven't investigated the cause. 
+On the first ALU controller, the central white button is mapped to the `Xbox` or `PS` button on its virtual counterpart. The `<<` button is mapped to `select`/`back`.
+
+There's currently no way of changing these mappings without editing the code and re-building the project (the edits would be pretty simple).
+
+When using a virtual DS4 controller, the accelerometer shows output in a single direction. This may be the default when using a real controller (due to gravity) but in any case doesn't appear to affect operation. However, please bear this in mind in case you run any applications which accept accelerometer input.
+
+## How to use
+
+To create a pair of Xbox 360 controllers, representing each of the controllers in the ALU control deck, run:
+
+```
+python main.py
+```
+
+To represent the physical controllers as PlayStation DualShock 4 controllers instead, run:
+
+```
+python main.py -t DS4
+```
+
+The program can read from attached HID devices and print the results to the console. This functionality was used to retrieve the values of each of the control deck inputs so they could be mapped to the virtual controller outputs in the main application. It throws read errors for some HID devices. Because the error-throwing devices did not include the control deck controllers I haven't investigated the cause. 
 
 > The trackball and spinners, which report as single mouse device, **do** throw read errors.
 
@@ -33,10 +50,30 @@ To read from the attached HID devices, run:
 python main.py -r
 ```
 
-## Config File
+## Options
 
-This is designed to enable the program to be used with other controller types not supported by Windows. To add a controller, run the read command. The inputs for a given controller are provided in a list. Note the index associated with each input and the value of a given action (button press, stick move etc). Then add these to the config file, following the format of the existing controller definition. 
+There are several options which can be passed on the command line:
 
-Note that the key for each definition is the `vendor_id` and `product_id` separated by a colon. Also note that these are not the same as the `VID` or `PID`. The latter pair refer to the device as a whole (e.g. the whole ALU control deck). The former pair refer to an individual device, e.g. a single controller within the control deck.
+```
+Usage: main.py [options]
 
-> The ALU control deck is a composite device (has a `VID` and `PID`) comprised of three child devices, the two controller devices (one stick, six game buttons, a start button and in the case of the first controller a menu and a select button), and a device comprising the trackball and spinners which reports as a mouse. 
+Represent Arcade Legends Ultimate control deck as 360/DS4 conrtollers  
+
+Options:
+  -h, --help            show this help message and exit
+  -r, --read            Read from attached HID devices, print inputs to
+                        console. Ignores all other options except -r   
+  -s REPORT_SIZE, --reportsize=REPORT_SIZE
+                        The report size specified when reading from HID
+                        devices. Default 256. Should be no need to change.
+  -t TYPE, --type=TYPE  Virtual device type. Defaults to Xbox 360 controller.
+                        Specify '-t DS4' to use virtual DualShock 4
+                        controllers instead
+  -d DEVICE, --device=DEVICE
+                        The vendor_id:product_id for the two ALU controllers,
+                        as reported by the '-r- option. Just in case they vary
+                        machine to machine. Defaults to '2104:35096'
+  -p POLLRATE, --pollrate=POLLRATE
+                        The poll rate of the physical controllers in HZ.
+                        Defaults to 500
+```

@@ -3,10 +3,7 @@ import threading
 
 import hid
 
-import shared
-
 device_states = {}
-REPORT_SIZE = shared.get_config().get("report_size")
 
 
 def print_device_input(device, device_spec, report_size):
@@ -29,7 +26,7 @@ def print_device_input(device, device_spec, report_size):
         print(f"Error reading from device {path}: {e}")
 
 
-def read_all_devices():
+def read_all_devices(report_size: int):
     device_specs = hid.enumerate()
     print(f"Found {len(device_specs)} devices...")
     for device_spec in device_specs:
@@ -37,7 +34,7 @@ def read_all_devices():
             device = hid.device()
             device.open_path(device_spec['path'])
             print(f"Opened device: {device_spec['manufacturer_string']} {device_spec['product_string']}")
-            thread = threading.Thread(target=print_device_input, args=(device, device_spec, REPORT_SIZE))
+            thread = threading.Thread(target=print_device_input, args=(device, device_spec, report_size))
             thread.start()
 
         except Exception as e:

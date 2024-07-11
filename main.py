@@ -8,7 +8,6 @@ import hid
 import vgamepad as vg
 
 import read
-import shared
 
 # ALU joystick input values
 JOYSTICK_INDEX = 3
@@ -250,12 +249,12 @@ class DS4GameController(Controller):
         self.vpad.update()
 
 
-def get_controllers(device_specs: list[dict], config: dict[str, dict], v_class: Type[Controller]) -> list[Controller]:
+def get_controllers(device_specs: list[dict], v_class: Type[Controller], device_vid_pid: str, report_size: int) -> list[Controller]:
     controllers = []
     for device_spec in device_specs:
-        if f"{device_spec.get("vendor_id")}:{device_spec.get("product_id")}" in config["devices"]:
+        if f"{device_spec.get("vendor_id")}:{device_spec.get("product_id")}" == device_vid_pid:
             if device_spec.get("usage_page") == 1 and device_spec.get("usage") == 5:
-                controllers.append(v_class(device_spec["path"], config["report_size"]))
+                controllers.append(v_class(device_spec["path"], report_size))
     return controllers
 
 
@@ -265,27 +264,32 @@ def get_virtual_controller_class(options: Values) -> Type[Controller]:
     return XboxGameController
 
 
-def set_output_loop(controller: Controller):
+def set_output_loop(controller: Controller, poll_interval: float):
     while True:
         controller.set_output()
-        time.sleep(0.002)
+        time.sleep(poll_interval)
 
 
 if __name__ == "__main__":
-    parser = OptionParser()
-    parser.add_option("-r", "--read", dest="read", action="store_true", default=False)
-    parser.add_option("-t", "--type", dest="type", default="360")
+    parser = OptionParser(usage="usage: %prog [options]", description="Represent Arcade Legends Ultimate control deck as 360/DS4 controllers")
+    parser.add_option("-r", "--read", dest="read", action="store_true", default=False, help="Read from attached HID devices, print inputs to console. Ignores all other options except -r")
+    parser.add_option("-s", "--reportsize", dest="report_size", default=256, type="int", help="The report size specified when reading from HID devices. Default 256. Should be no need to change.")
+    parser.add_option("-t", "--type", dest="type", default="360", help="Virtual device type. Defaults to Xbox 360 controller. Specify '-t DS4' to use virtual DualShock 4 controllers instead")
+    parser.add_option("-d", "--device", dest="device", default="2104:35096", help="The vendor_id:product_id for the two ALU controllers, as reported by the '-r' option. Just in case they vary machine to machine. Defaults to '2104:35096'")
+    parser.add_option("-p", "--pollrate", dest="pollrate", default=500, type="int", help="The poll rate of the physical controllers in HZ. Defaults to 500")
     (options, args) = parser.parse_args()
     if options.read:
-        read.read_all_devices()
+        read.read_all_devices(options.report_size)
     else:
         v_class = get_virtual_controller_class(options)
+        poll_interval = 1 / options.pollrate
         device_specs = hid.enumerate()
-        config = shared.get_config()
-        controllers = get_controllers(device_specs, config, v_class)
+        controllers = get_controllers(device_specs, v_class, options.device, options.report_size)
+        
+
         threads = []
         for controller in controllers:
-            t = Thread(target=set_output_loop, args=(controller,))
+            t = Thread(target=set_output_loop, args=(controller, poll_interval))
             t.start()
             threads.append(t)
 

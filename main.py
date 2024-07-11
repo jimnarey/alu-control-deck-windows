@@ -1,4 +1,5 @@
 from typing import Type
+from threading import Thread
 from optparse import OptionParser, Values
 from abc import ABC, abstractmethod
 import time
@@ -264,6 +265,12 @@ def get_virtual_controller_class(options: Values) -> Type[Controller]:
     return XboxGameController
 
 
+def set_output_loop(controller: Controller):
+    while True:
+        controller.set_output()
+        time.sleep(0.002)
+
+
 if __name__ == "__main__":
     parser = OptionParser()
     parser.add_option("-r", "--read", dest="read", action="store_true", default=False)
@@ -276,11 +283,12 @@ if __name__ == "__main__":
         device_specs = hid.enumerate()
         config = shared.get_config()
         controllers = get_controllers(device_specs, config, v_class)
-        controllers = [controllers[0]]
-        while True:
-            for controller in controllers:
-                controller.set_output()
-            time.sleep(0.002)
+        threads = []
+        for controller in controllers:
+            t = Thread(target=set_output_loop, args=(controller,))
+            t.start()
+            threads.append(t)
 
-
-
+        # Probably not needed in this case
+        for t in threads:
+            t.join()

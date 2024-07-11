@@ -9,11 +9,11 @@ device_states = {}
 REPORT_SIZE = shared.get_config().get("report_size")
 
 
-def print_device_input(device, device_info, report_size):
+def print_device_input(device, device_spec, report_size):
     global device_states
-    path = device_info["path"]
-    vendor_id = device_info["vendor_id"]
-    product_id = device_info["product_id"]
+    path = device_spec["path"]
+    vendor_id = device_spec["vendor_id"]
+    product_id = device_spec["product_id"]
     previous_state = device_states.get(path, [])
 
     try:
@@ -30,16 +30,15 @@ def print_device_input(device, device_info, report_size):
 
 
 def read_all_devices():
-    devices = hid.enumerate()
-    print(f"Found {len(devices)} devices...")
-    for device_info in devices:
+    device_specs = hid.enumerate()
+    print(f"Found {len(device_specs)} devices...")
+    for device_spec in device_specs:
         try:
             device = hid.device()
-            device.open_path(device_info['path'])
-            print(f"Opened device: {device_info['manufacturer_string']} {device_info['product_string']}")
-            report_size = 256
-            thread = threading.Thread(target=print_device_input, args=(device, device_info, report_size))
+            device.open_path(device_spec['path'])
+            print(f"Opened device: {device_spec['manufacturer_string']} {device_spec['product_string']}")
+            thread = threading.Thread(target=print_device_input, args=(device, device_spec, REPORT_SIZE))
             thread.start()
 
         except Exception as e:
-            print(f"Failed to open device {device_info['path']}: {e}")
+            print(f"Failed to open device {device_spec['path']}: {e}")

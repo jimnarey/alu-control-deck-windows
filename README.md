@@ -1,14 +1,31 @@
 # Arcade Legends Ultimate Control Deck Windows
 
-This program enables use of the control deck which forms part of the Arcade Legends Ultimate (ALU) arcade cabinet to be used on Windows. It uses [vJoy](https://sourceforge.net/projects/vjoystick/) to present the two controllers as either Xbox 360 or DualShock 4 controllers.
+This program enables use of the control deck which forms part of the Arcade Legends Ultimate (ALU) arcade cabinet to be used on Windows. It uses [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases) to present the two controllers as either Xbox 360 or DualShock 4 controllers.
+
+> Note the comment in the releases page about having to run the setup program
+twice.
 
 This is mostly useful for anyone who has replaced the SBC in the ALU with a full PC. This is worth doing.
 
-> I replaced the SBC in my ALU with the guts of a refurbished Lenovo office PC which cost around £120 and it makes everything easier to work with and expands the capability of the cabinet enormously. Far and away the best OS is Batocera, which works with the ALU's control deck out of the box. However, despite Batocera's excellent WINE support, there are some edge cases where running Windows is necessary. 
+> If you upgrade your ALU cabinet with a full PC motherboard, Batocera is the best choice of OS for virtually all use cases. It has very good WINE support. However, there are a few egde cases where Windows is needed.
+
+## Requirements
+
+- Windows 10. May work on other versions but this hasn't been tested.
+- [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases)
+- [Python 3](https://www.python.org/downloads/windows/)
+
+> Note the comment in the ViGEmBus releases page about needing to run the installer twice.
 
 ## Status
 
-This is a work in progress. Right now, it only reads from the HID devices connected to the machine and prints the status of their inputs. This is necessary to properly map the controls to vJoy. 
+This is a work in progress.
+
+Running `python main.py` will enable the first of the two controllers in the control deck and present it as a DualShock 4 controller. However, the menu/guide button on the control deck is unmapped. Further work is needed to enable this and the second controller.
+
+The program can read from attached HID devices and print the results to the console. This functionality was used to map the control deck inputs to the virtual controller outputs. It throws read errors for some HID devices. Because these did not include the control deck controllers I haven't investigated the cause. 
+
+> The trackball and spinners, which report as single mouse device, **do** throw read errors.
 
 To read from the attached HID devices, run:
 

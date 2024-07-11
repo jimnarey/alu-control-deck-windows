@@ -16,9 +16,9 @@ This is mostly useful for anyone who has replaced the SBC in the ALU with a full
 
 ## Status
 
-This is still a work in progress but so far, works well.
+This is still a work in progress but so far works well.
 
-`C` and `Z` on each of the ALU controllers are mapped to `L1` and `R1` on the virtual pads. `P1` and `P2` are mapped to the start button on their respective virtual controllers. 
+`C` and `Z` on each of the ALU controllers are mapped to `L1` and `R1` on the virtual pads. `P1` and `P2` are mapped to the `start` button on their respective virtual controllers. 
 
 On the first ALU controller, the central white button is mapped to the `Xbox` or `PS` button on its virtual counterpart. The `<<` button is mapped to `select`/`back`.
 
@@ -31,13 +31,13 @@ When using a virtual DS4 controller, the accelerometer shows output in a single 
 To create a pair of Xbox 360 controllers, representing each of the controllers in the ALU control deck, run:
 
 ```
-python main.py
+python alu-control-win.py
 ```
 
 To represent the physical controllers as PlayStation DualShock 4 controllers instead, run:
 
 ```
-python main.py -t DS4
+python alu-control-win.py -t DS4
 ```
 
 The program can read from attached HID devices and print the results to the console. This functionality was used to retrieve the values of each of the control deck inputs so they could be mapped to the virtual controller outputs in the main application. It throws read errors for some HID devices. Because the error-throwing devices did not include the control deck controllers I haven't investigated the cause. 
@@ -47,7 +47,7 @@ The program can read from attached HID devices and print the results to the cons
 To read from the attached HID devices, run:
 
 ```
-python main.py -r
+python alu-control-win.py -r
 ```
 
 ## Options

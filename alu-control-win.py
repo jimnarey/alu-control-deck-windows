@@ -271,7 +271,7 @@ def set_output_loop(controller: Controller, poll_interval: float):
 
 
 if __name__ == "__main__":
-    parser = OptionParser(usage="usage: %prog [options]", description="Represent Arcade Legends Ultimate control deck as 360/DS4 controllers")
+    parser = OptionParser(usage="usage: alu-control-win.exe [options]", description="Represent Arcade Legends Ultimate control deck as 360/DS4 controllers")
     parser.add_option("-r", "--read", dest="read", action="store_true", default=False, help="Read from attached HID devices, print inputs to console. Ignores all other options except -r")
     parser.add_option("-s", "--reportsize", dest="report_size", default=256, type="int", help="The report size specified when reading from HID devices. Default 256. Should be no need to change.")
     parser.add_option("-t", "--type", dest="type", default="360", help="Virtual device type. Defaults to Xbox 360 controller. Specify '-t DS4' to use virtual DualShock 4 controllers instead")
